@@ -1,0 +1,32 @@
+---
+title: Tab Text Trouble
+---
+<h1>Tab Text Trouble</h1>
+<p>This is my first time really posting on Github pages. I've also never written a devblog. 
+When I have time I'm going to reformat this all. 
+I just wanted to write something fast that might hopefully help anyone who may have this issue.
+<p>
+Android seems to have a problem with Text color in <a href="https://developer.android.com/reference/android/support/design/widget/TabLayout.html">TabLayout</a>s.
+I could not get my TabLayout to listen to the text color dictated in my styles.xml. I wanted white text, but no matter what I did, the text color ended up black.
+It turned out to be an issue, since my app's primaryColor is black. The tab text was black on top of a black tab.
+<p>
+The fix was really counterintuitive. I ended up getting it from <a href="https://www.reddit.com/r/androiddev/comments/3d6qka/trying_to_change_the_text_color_of_a_tablayout/ct2mh5s">fodawim on reddit.</a>
+Here's the code I used to fix the problem, preceded with code that might be relevant, for context's sake:
+
+
+    
+        // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
+        adapter = new ViewPagerAdapter(getSupportFragmentManager(), titles, numTabs);
+
+        // Assigning ViewPager View and setting the adapter
+        pager = (ViewPager) findViewById(R.id.pager);
+        pager.setAdapter(adapter);
+
+        tabs = (TabLayout) findViewById(R.id.tabs);
+        tabs.setupWithViewPager(pager);
+
+        //For some reason, the Tabs will not have white text without the following code.
+        tabs.removeAllTabs();
+        tabs.setTabTextColors(0xffffffff, 0xffffffff);
+        tabs.addTab(tabs.newTab().setText("Search"));
+        tabs.addTab(tabs.newTab().setText("Featured"));
